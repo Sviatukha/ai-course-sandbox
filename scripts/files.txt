@@ -1,0 +1,4 @@
+src/components/legacy/ClickableCard.tsx
+src/components/legacy/LoginForm.tsx
+src/components/legacy/Modal.tsx
+src/components/legacy/Tabs.tsx

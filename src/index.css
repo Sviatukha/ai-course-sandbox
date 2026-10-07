@@ -1,0 +1,21 @@
+:root {
+  --text: #1f2430;
+  --bg: #ffffff;
+  --border: #d5d8df;
+  --accent: #3b5bdb;
+  font:
+    16px/1.5 system-ui,
+    sans-serif;
+  color: var(--text);
+  background: var(--bg);
+}
+
+body {
+  margin: 0;
+}
+
+main {
+  max-width: 640px;
+  margin: 0 auto;
+  padding: 24px 16px;
+}
