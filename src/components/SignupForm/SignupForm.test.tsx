@@ -61,6 +61,33 @@ describe('SignupForm', () => {
     expect(screen.queryByText('Введите пароль')).not.toBeInTheDocument()
   })
 
+  it('показывает ошибку пустого пароля после blur', async () => {
+    render(<SignupForm />)
+    const user = userEvent.setup()
+    await user.click(screen.getByLabelText('Пароль'))
+    await user.tab()
+    expect(screen.getByText('Введите пароль')).toBeInTheDocument()
+  })
+
+  it('показывает ошибку, если подтверждение пустое, после blur', async () => {
+    render(<SignupForm />)
+    const user = userEvent.setup()
+    await user.type(screen.getByLabelText('Пароль'), '12345678')
+    await user.click(screen.getByLabelText('Подтверждение пароля'))
+    await user.tab()
+    expect(screen.getByText('Пароли не совпадают')).toBeInTheDocument()
+  })
+
+  it('показывает ошибку после submit по Enter, не снимая фокус с поля', async () => {
+    const onSubmit = vi.fn()
+    render(<SignupForm onSubmit={onSubmit} />)
+    const user = userEvent.setup()
+    // Фокус остаётся в email (blur не срабатывает) — проверяем именно путь submit.
+    await user.type(screen.getByLabelText('Email'), 'bad{Enter}')
+    expect(screen.getByText('Некорректный email')).toBeInTheDocument()
+    expect(onSubmit).not.toHaveBeenCalled()
+  })
+
   it('показывает ошибки обязательных полей при пустом сабмите', async () => {
     render(<SignupForm />)
     await fill('', '', '')
