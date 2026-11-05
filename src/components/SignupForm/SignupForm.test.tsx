@@ -11,12 +11,54 @@ async function fill(email: string, password: string, confirm: string) {
 }
 
 describe('SignupForm', () => {
-  it('не показывает ошибки до сабмита', async () => {
+  it('не показывает ошибку, пока поле в фокусе (до blur)', async () => {
     render(<SignupForm />)
     const user = userEvent.setup()
     await user.type(screen.getByLabelText('Email'), 'bad')
-    await user.type(screen.getByLabelText('Пароль'), '123')
     expect(screen.queryByRole('alert')).not.toBeInTheDocument()
+  })
+
+  it('показывает ошибку email после blur', async () => {
+    render(<SignupForm />)
+    const user = userEvent.setup()
+    await user.type(screen.getByLabelText('Email'), 'not-an-email')
+    await user.tab()
+    expect(screen.getByText('Некорректный email')).toBeInTheDocument()
+  })
+
+  it('показывает ошибку пустого email после blur', async () => {
+    render(<SignupForm />)
+    const user = userEvent.setup()
+    await user.click(screen.getByLabelText('Email'))
+    await user.tab()
+    expect(screen.getByText('Введите email')).toBeInTheDocument()
+  })
+
+  it('показывает ошибку короткого пароля после blur', async () => {
+    render(<SignupForm />)
+    const user = userEvent.setup()
+    await user.type(screen.getByLabelText('Пароль'), '1234567')
+    await user.tab()
+    expect(screen.getByText('Пароль должен содержать минимум 8 символов')).toBeInTheDocument()
+  })
+
+  it('показывает ошибку несовпадения после blur подтверждения', async () => {
+    render(<SignupForm />)
+    const user = userEvent.setup()
+    await user.type(screen.getByLabelText('Пароль'), '12345678')
+    await user.type(screen.getByLabelText('Подтверждение пароля'), '87654321')
+    await user.tab()
+    expect(screen.getByText('Пароли не совпадают')).toBeInTheDocument()
+  })
+
+  it('не показывает ошибку других полей при blur одного', async () => {
+    render(<SignupForm />)
+    const user = userEvent.setup()
+    await user.type(screen.getByLabelText('Email'), 'bad')
+    await user.tab()
+    // Blur был только у email — ошибки пароля ещё нет.
+    expect(screen.getByText('Некорректный email')).toBeInTheDocument()
+    expect(screen.queryByText('Введите пароль')).not.toBeInTheDocument()
   })
 
   it('показывает ошибки обязательных полей при пустом сабмите', async () => {
