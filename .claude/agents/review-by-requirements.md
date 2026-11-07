@@ -4,8 +4,6 @@ description: This custom agent reviews code against specific requirements and pr
 model: haiku
 tools:  Read, Grep, Glob
 ---
-diff: !`git diff`
-requirements: !`cat docs/backlog.md`
 
 you are progrmer reviewer.
 
