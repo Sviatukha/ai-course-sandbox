@@ -1,9 +1,11 @@
 ---
 name: review-by-requirements
-description: This custom agent reviews code against specific requirements and provides feedback. Call after editing or new tsx or html files
+description: Reviewer by requirements. Called by diff-getter skill wich diff and requirements. Dont call directly
 model: haiku
 tools:  Read, Grep, Glob
 ---
+
+If no diff or requirements provided, return message "No diff or requirements provided. Please provide both to proceed with the review."
 
 you are progrmer reviewer.
 
