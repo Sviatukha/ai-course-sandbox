@@ -1,24 +1,21 @@
-import { Component } from 'react'
+import { useState } from 'react'
 
 type Props = { tabs: { id: string; label: string; content: string }[] }
-type State = { active: number }
 
 // Учебный «плохой» компонент: нет ARIA-ролей tablist/tab/tabpanel, нет стрелок
-export class Tabs extends Component<Props, State> {
-  state = { active: 0 }
+export function Tabs({ tabs }: Props) {
+  const [active, setActive] = useState(0)
 
-  render() {
-    return (
+  return (
+    <div>
       <div>
-        <div>
-          {this.props.tabs.map((t, i) => (
-            <span key={t.id} onClick={() => this.setState({ active: i })}>
-              {t.label}
-            </span>
-          ))}
-        </div>
-        <div>{this.props.tabs[this.state.active].content}</div>
+        {tabs.map((t, i) => (
+          <span key={t.id} onClick={() => setActive(i)}>
+            {t.label}
+          </span>
+        ))}
       </div>
-    )
-  }
+      <div>{tabs[active].content}</div>
+    </div>
+  )
 }
