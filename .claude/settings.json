@@ -18,6 +18,12 @@
                 "hooks": [
                     {"type": "command", "command": "\"$CLAUDE_PROJECT_DIR\"/.claude/hooks/protect-files.sh"}
                 ]
+            },
+            {
+                "matcher": "mcp__github__.*",
+                "hooks": [
+                    {"type": "command", "command": "\"$CLAUDE_PROJECT_DIR\"/.claude/hooks/log-github-mcp.sh"}
+                ]
             }
         ],
         "Stop": [
